@@ -50,7 +50,7 @@ export async function authenticate(req: Request) {
 
     return userId;
   } catch (error) {
-    console.error("Authentication error:", error.message);
+    console.error("Authentication error:", error);
     throw new Error("Authentication failed");
   }
 }

@@ -7,7 +7,7 @@ export const setCookie = (res: NextResponse, token: string) => {
     secure: process.env.NODE_ENV === "production",
     path: "/",
     sameSite: "strict",
-    maxAge: 60 * 60, // 1 hour
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   });
 };
 

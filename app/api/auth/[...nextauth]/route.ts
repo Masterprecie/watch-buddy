@@ -26,16 +26,20 @@ export const authOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.email = token.email;
+        session.expires = token.expires; // Include token expiry in session
       }
       return session;
     },
 
     // Callback to handle the JWT token
     async jwt({ token, account, profile }) {
+      const currentTime = Date.now();
+
       if (account && profile) {
         // Add user information to the token on sign-in
         token.id = profile.sub; // Google user ID
         token.email = profile.email;
+        token.expires = currentTime + 30 * 24 * 60 * 60 * 1000; // Set token to expire in 30 days
       }
 
       // Add other logic if needed, e.g., token refresh
@@ -64,6 +68,9 @@ export const authOptions = {
   // Optionally, customize the session strategy, e.g., JWT or database session
   session: {
     strategy: "jwt", // Use JWT strategy for storing session data
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // Set JWT token validity to 30 days
   },
 };
 
