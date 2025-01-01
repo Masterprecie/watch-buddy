@@ -37,7 +37,10 @@ const Navbar = () => {
   return (
     <nav className="relative z-50 bg-black text-white">
       <div className="flex items-center  justify-between w-[90%] mx-auto py-5">
-        <div className="flex items-center gap-3">
+        <div
+          onClick={() => router.push("/")}
+          className="flex items-center gap-3"
+        >
           <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
           <p className="font-semibold text-white">WatchBuddy</p>
         </div>
