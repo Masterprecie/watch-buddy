@@ -4,6 +4,7 @@ import {
   useDeleteWatchListMutation,
 } from "@/app/features/movies/api";
 import Image from "next/image";
+import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { RiDeleteBinLine } from "react-icons/ri";
 
@@ -109,6 +110,10 @@ const MovieCard = ({
           </div>
         </div>
       </div>
+
+      <p>
+        <Link href={`/details/${data.id}`}>View Details</Link>
+      </p>
     </div>
   );
 };

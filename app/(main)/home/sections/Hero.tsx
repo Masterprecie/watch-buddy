@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -9,7 +10,19 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { useState } from "react";
 import Image from "next/image";
 
-const Hero = ({ data, handleNextPage, handlePrevPage }) => {
+interface HeroProps {
+  data: Array<{
+    id: number;
+    name?: string;
+    title?: string;
+    backdrop?: string;
+    rating?: number;
+    overview?: string;
+  }>;
+  handlePrevPage: () => void;
+}
+
+const Hero = ({ data, handlePrevPage }: HeroProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Update the background image dynamically based on the active slide

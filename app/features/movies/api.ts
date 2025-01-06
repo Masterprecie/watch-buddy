@@ -13,6 +13,13 @@ export const movieApi = createApi({
         method: "GET",
       }),
     }),
+    getMoviesById: builder.query<IResponse, number | unknown>({
+      query: (movieId) => ({
+        url: `/api/movieDetails/${movieId}`,
+        method: "GET",
+      }),
+    }),
+
     getWatchList: builder.query<IResponse, void>({
       query: () => ({
         url: `/api/watchlist`,
@@ -44,4 +51,5 @@ export const {
   useGetWatchListQuery,
   useAddToWatchListMutation,
   useDeleteWatchListMutation,
+  useGetMoviesByIdQuery,
 } = movieApi;

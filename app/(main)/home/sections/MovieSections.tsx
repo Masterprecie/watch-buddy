@@ -1,4 +1,3 @@
-// filepath: /c:/Users/PRECIOUS/Desktop/NextJs Projects/watch-buddy/app/home/sections/MovieSections.tsx
 import { useRef } from "react";
 import MovieCard from "@/components/MovieCard";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
