@@ -31,15 +31,7 @@ const MovieSections = ({ error, isLoading, title, data }: MovieProp) => {
   if (isLoading) {
     return <p>Loading...</p>;
   } else if (error) {
-    return (
-      <ErrorMessage
-        message={
-          error && "data" in error
-            ? error.data?.error || "An Error Occurred"
-            : "An Error Occurred"
-        }
-      />
-    );
+    return <ErrorMessage error={error} />;
   } else if (data?.length === 0) {
     return <p>No Movies Available</p>;
   }
