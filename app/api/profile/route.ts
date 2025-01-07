@@ -1,21 +1,14 @@
-import { IUser, User } from "@/models/User";
+import { User } from "@/models/User";
+import { authenticate } from "@/utils/authMiddleware";
+import { connectDB } from "@/utils/db";
 import { NextResponse } from "next/server";
 
-interface Request {
-  user: {
-    id: string;
-  };
-}
+export async function GET(req: Request) {
+  await connectDB();
 
-interface ErrorResponse {
-  error: string;
-}
-
-export async function GET(
-  req: Request
-): Promise<NextResponse<IUser | ErrorResponse>> {
+  let userId;
   try {
-    const userId = req.user.id;
+    userId = await authenticate(req);
     const user = await User.findById(userId);
     return NextResponse.json(user, { status: 200 });
   } catch (error) {

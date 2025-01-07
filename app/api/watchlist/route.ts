@@ -14,9 +14,12 @@ export async function GET(req: Request) {
     const watchlist = await Watchlist.findOne({ userId });
 
     if (!watchlist) {
-      return new Response(JSON.stringify({ message: "Watchlist not found" }), {
-        status: 404,
-      });
+      return (
+        NextResponse.json({ message: "Watchlist not found" }),
+        {
+          status: 404,
+        }
+      );
     }
 
     return NextResponse.json(
