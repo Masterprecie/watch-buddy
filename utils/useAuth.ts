@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +9,7 @@ export const useAuth = () => {
   const dispatch = useDispatch();
 
   // Get the user data from Redux store
-  const storedUserData = useSelector((state) => state.auth); // Accessing entire auth slice
+  const storedUserData = useSelector((state: { auth: any }) => state.auth); // Accessing entire auth slice
   const [userData, setUserData] = useState(storedUserData); // Initialize state from Redux first
 
   useEffect(() => {

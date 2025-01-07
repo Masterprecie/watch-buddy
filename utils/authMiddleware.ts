@@ -1,8 +1,8 @@
 import { getCookieValue } from "@/utils/extractCookie";
 import { verifyToken } from "@/utils/jwt"; // Your custom JWT verification function
 import { getToken } from "next-auth/jwt"; // Import getToken from NextAuth
-
-export async function authenticate(req: Request) {
+import { NextRequest } from "next/server"; // Import NextRequest from next/server
+export async function authenticate(req: NextRequest) {
   const cookieHeader = req.headers.get("cookie");
 
   let userId;
