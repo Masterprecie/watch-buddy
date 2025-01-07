@@ -13,6 +13,7 @@ const WatchlistSchema = new mongoose.Schema(
         poster: { type: String, required: true },
         overview: { type: String, required: true },
         rating: { type: String, required: true },
+        addWatchlist: { type: Boolean, default: false, required: true },
       },
     ],
   },

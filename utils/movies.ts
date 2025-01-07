@@ -1,3 +1,8 @@
+import {
+  MovieRecommendations,
+  MovieResponse,
+} from "@/app/features/movies/interfaces";
+
 const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
 const MOVIE_BASE_URL = process.env.MOVIE_BASE_URL;
 
@@ -32,7 +37,7 @@ export async function fetchMovies(category: string, page: number = 1) {
     }
 
     const data = await response.json();
-    return data.results.map((movie: any) => ({
+    return data.results.map((movie: MovieResponse) => ({
       backdrop: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
       id: movie.id,
       name: movie.name,
@@ -56,8 +61,6 @@ export async function fetchMovieDetails(movieId: number | string) {
     if (!response.ok || data.success === false) {
       throw new Error(data.status_message || "Failed to fetch movie details");
     }
-
-    // console.log(data);
     return {
       adult: data.adult,
       backdrop: `https://image.tmdb.org/t/p/original${data.backdrop_path}`,
@@ -75,20 +78,63 @@ export async function fetchMovieDetails(movieId: number | string) {
       tagline: data.tagline,
       video: data.video,
       vote_count: data.vote_count,
-      genres: data.genres.map((genre: any) => ({
+      genres: data.genres.map((genre: { id: number; name: string }) => ({
         id: genre.id,
         name: genre.name,
       })),
       belongs_to_collection: {
-        id: data.belongs_to_collection.id,
-        name: data.belongs_to_collection.name,
-        poster: `https://image
-        .tmdb.org/t/p/w300${data.belongs_to_collection.poster_path}`,
-        backdrop: `https://image.tmdb.org/t/p/original${data.belongs_to_collection.backdrop_path}`,
+        id: data.belongs_to_collection?.id,
+        name: data.belongs_to_collection?.name,
+        poster: `https://image.tmdb.org/t/p/w300${data.belongs_to_collection?.poster_path}`,
+        backdrop: `https://image.tmdb.org/t/p/original${data.belongs_to_collection?.backdrop_path}`,
       },
     };
   } catch (error) {
     console.error(error);
-    throw new Error(error.message || "Failed to fetch movie details");
+    if (error instanceof Error) {
+      throw new Error(error.message || "Failed to fetch movie details");
+    } else {
+      throw new Error("Failed to fetch movie details");
+    }
+  }
+}
+
+export async function fetchRecommendedMovies(
+  movieId: number | string,
+  page: number = 1
+) {
+  try {
+    const endpoint = `${MOVIE_BASE_URL}/movie/${movieId}/recommendations?api_key=${MOVIE_API_KEY}&language=en-US&page=${page}`;
+    const response = await fetch(endpoint);
+    const data = await response.json();
+
+    if (!response.ok || data.success === false) {
+      throw new Error(
+        data.status_message || "Failed to fetch recommended movies"
+      );
+    }
+
+    return data.results.map((movie: MovieRecommendations) => ({
+      adult: movie.adult,
+      backdrop: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
+      name: movie.name,
+      media_type: movie.media_type,
+      id: movie.id,
+      title: movie.title,
+      overview: movie.overview,
+      poster: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
+      rating: movie.vote_average,
+      popularity: movie.popularity,
+      release_date: movie.release_date,
+      video: movie.video,
+      vote_count: movie.vote_count,
+    }));
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error) {
+      throw new Error(error.message || "Failed to fetch recommended movie");
+    } else {
+      throw new Error("Failed to fetch recommended movie");
+    }
   }
 }

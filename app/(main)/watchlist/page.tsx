@@ -2,8 +2,11 @@
 import { useGetWatchListQuery } from "@/app/features/movies/api";
 import MovieCard from "@/components/MovieCard";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa6";
 
 export default function WatchList() {
+  const router = useRouter();
   const { data: watchlist, isLoading, error } = useGetWatchListQuery();
 
   console.log("watchlist", watchlist);
@@ -16,6 +19,13 @@ export default function WatchList() {
 
       <div className="min-h-screen">
         <div className="bg-black min-h-[30vh] ">
+          <button
+            className="bg-gray-800 flex items-center gap-2 px-3 py-1 rounded-md my-5"
+            onClick={() => router.back()}
+          >
+            <FaArrowLeft />
+            Back
+          </button>
           <div className="w-[90%]  py-16 mx-auto text-white space-y-4">
             <h1 className="text-4xl font-semibold">Your Watchlist </h1>
             <p>

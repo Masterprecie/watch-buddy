@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { fetchMovieDetails } from "@/utils/movies";
+import { fetchRecommendedMovies } from "@/utils/movies";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: any }) {
   try {
-    const { movieId } = await params; // Unwrap the params promise here
+    const { movieId } = params;
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page") || "1", 10);
 
     if (!movieId) {
       return NextResponse.json(
@@ -13,8 +15,8 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
       );
     }
 
-    const movieDetails = await fetchMovieDetails(movieId);
-    return NextResponse.json(movieDetails, { status: 200 });
+    const recommendedMovies = await fetchRecommendedMovies(movieId, page);
+    return NextResponse.json(recommendedMovies, { status: 200 });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Server Error";

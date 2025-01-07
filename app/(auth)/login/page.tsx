@@ -2,7 +2,7 @@
 import { useLoginMutation } from "@/app/features/auth/authApi";
 import { setCredentials } from "@/app/features/auth/authSlice";
 import { alert } from "@/utils/alert";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";

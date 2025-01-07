@@ -9,20 +9,15 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useState } from "react";
 import Image from "next/image";
+import { Movie } from "@/app/features/movies/interfaces";
 
 interface HeroProps {
-  data: Array<{
-    id: number;
-    name?: string;
-    title?: string;
-    backdrop?: string;
-    rating?: number;
-    overview?: string;
-  }>;
+  data: Movie[];
+  handleNextPage: () => void;
   handlePrevPage: () => void;
 }
 
-const Hero = ({ data, handlePrevPage }: HeroProps) => {
+const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Update the background image dynamically based on the active slide
@@ -60,7 +55,7 @@ const Hero = ({ data, handlePrevPage }: HeroProps) => {
         {data?.map((movie) => (
           <SwiperSlide key={movie.id}>
             <div className="w-[90%] mx-auto py-28 h-full">
-              <div className="max-w-[500px] ">
+              <div className="max-w-[700px] ">
                 <h1 className="font-bold text-6xl">
                   {movie.name || movie.title}
                 </h1>
@@ -75,7 +70,7 @@ const Hero = ({ data, handlePrevPage }: HeroProps) => {
                     />
                   </div>
 
-                  <p>{movie.rating}/10</p>
+                  <p>{Math.round(movie?.rating)}/10</p>
                 </div>
                 <p className="pb-2 line-clamp-4">{movie.overview}</p>
 

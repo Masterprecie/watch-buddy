@@ -1,42 +1,14 @@
-export interface Movies {
-  backdrop: string;
+import { IResponse } from "../auth/interfaces";
+
+export interface Movie {
+  movieId?: number;
   id: number;
-  _id?: string;
-  title?: string;
-  name?: string;
+  name: string;
+  title: string;
+  backdrop: string;
+  rating: number;
   overview: string;
   poster: string;
-  rating: number;
-}
-
-export interface WatchListPayload {
-  movieId: number;
-  title?: string;
-  name?: string;
-  poster: string;
-  overview: string;
-  rating: number;
-}
-
-export interface WatchListResponse {
-  watchlist: {
-    _id: string;
-    userId: string;
-    movies: [
-      {
-        movieId: string;
-        title: string;
-        poster: string;
-        overview: string;
-        rating: string;
-        _id: string;
-      }
-    ];
-    createdAt: string;
-    updatedAt: string;
-    __v: 8;
-  };
-  message: string;
 }
 
 export interface MovieDetails {
@@ -67,4 +39,102 @@ export interface MovieDetails {
   video: boolean;
   vote_average: number;
   vote_count: number;
+}
+
+export interface MovieResponse {
+  backdrop_path: string;
+  id: string;
+  title?: string;
+  name?: string;
+  overview: string;
+  poster_path: string;
+  vote_average: number;
+  category?: string;
+  page?: number;
+}
+
+export interface WatchListPayload {
+  movieId: number;
+  title?: string;
+  name?: string;
+  poster: string;
+  overview: string;
+  rating: number;
+  addWatchlist: boolean;
+}
+
+export interface WatchListResponse extends IResponse {
+  watchlist: {
+    _id: string;
+    userId: string;
+    movies: [
+      {
+        movieId: string;
+        title: string;
+        poster: string;
+        overview: string;
+        rating: string;
+        addWatchlist: boolean;
+        _id: string;
+      }
+    ];
+    createdAt: string;
+    updatedAt: string;
+    __v: 8;
+  };
+  message: string;
+}
+
+export interface MovieDetailsResponse extends IResponse {
+  movieId?: number;
+  adult: boolean;
+  backdrop_path: string;
+  belongs_to_collection: {
+    id: number;
+    name: string;
+    poster_path: string;
+    backdrop_path: string;
+  };
+  genres: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+  id: number;
+  name: string;
+  overview: string;
+  popularity: number;
+  poster: string;
+  release_date: string;
+  runtime: number;
+  status: string;
+  tagline: string;
+  title: string;
+  video: boolean;
+  rating: number;
+  vote_count: number;
+}
+export interface MovieRecommendations {
+  adult: boolean;
+  backdrop_path: string;
+  id: number;
+  name: string;
+  media_type: string;
+  backdrop: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface MovieRecommendationsResponse extends IResponse {
+  page: number;
+  data: MovieRecommendations[];
+  total_pages: number;
+  total_results: number;
 }

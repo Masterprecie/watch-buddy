@@ -3,6 +3,8 @@ import {
   useAddToWatchListMutation,
   useDeleteWatchListMutation,
 } from "@/app/features/movies/api";
+import { Movie } from "@/app/features/movies/interfaces";
+import { alert } from "@/utils/alert";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
@@ -13,7 +15,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 /* <IoMdCheckmark />; */
 
 interface MovieCardProps {
-  data: any;
+  data: Movie;
   showRemoveButton?: boolean;
   showAddButton?: boolean;
 }
@@ -33,14 +35,27 @@ const MovieCard = ({
       poster: data.poster,
       overview: data.overview,
       rating: data.rating,
+      addWatchlist: true,
     };
     addWatchlist(payload)
       .unwrap()
       .then((res) => {
         console.log(res);
+        if (res) {
+          alert({
+            type: "success",
+            message: "Movie Added to Watchlist",
+            timer: 2000,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        alert({
+          type: "error",
+          message: err.data.message || "Failed to add to watchlist",
+          timer: 2000,
+        });
       });
   };
 
@@ -48,14 +63,25 @@ const MovieCard = ({
     const payload = {
       movieId: data.movieId,
     };
-    console.log("payload", payload);
     removeWatchlist(payload)
       .unwrap()
       .then((res) => {
         console.log(res);
+        if (res) {
+          alert({
+            type: "success",
+            message: "Movie Removed from Watchlist",
+            timer: 2000,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        alert({
+          type: "error",
+          message: err.data.message || "Failed to remove from watchlist",
+          timer: 2000,
+        });
       });
   };
 
@@ -67,7 +93,7 @@ const MovieCard = ({
           alt={data.name || data.title}
           width={250}
           height={350}
-          className="w-full h-full rounded-md"
+          className="w-full h-[350px] rounded-md"
         />
       </div>
 
@@ -86,7 +112,7 @@ const MovieCard = ({
             />
           </div>
           <div className="flex items-center justify-between w-full ">
-            <p>{data.rating}/10</p>
+            <p>{Math.round(data?.rating)}/10</p>
 
             {showAddButton && (
               <div

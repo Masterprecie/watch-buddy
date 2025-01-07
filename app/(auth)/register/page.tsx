@@ -1,7 +1,7 @@
 "use client";
 import { useRegisterMutation } from "@/app/features/auth/authApi";
 import { alert } from "@/utils/alert";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

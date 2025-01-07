@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IResponse {
-  error: boolean;
-  errorCode: number;
-  message: string;
+  error?: boolean;
+  errorCode?: number;
+  message?: string;
   data: null | any;
 }
 

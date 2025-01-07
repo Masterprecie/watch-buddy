@@ -20,6 +20,8 @@ export async function GET(
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Internal Server Error" });
+    const errorMessage =
+      error instanceof Error ? error.message : "Server Error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

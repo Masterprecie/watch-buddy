@@ -1,4 +1,3 @@
-// filepath: /C:/Users/PRECIOUS/Desktop/NextJs Projects/watch-buddy/app/api/movies/route.ts
 import { fetchMovies } from "@/utils/movies";
 import { NextResponse, NextRequest } from "next/server";
 
@@ -11,6 +10,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(movies, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Server Error" }, { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : "Server Error";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

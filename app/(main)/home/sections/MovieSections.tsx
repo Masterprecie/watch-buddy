@@ -1,10 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from "react";
 import MovieCard from "@/components/MovieCard";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
 import Link from "next/link";
-const MovieSections = ({ title, data }) => {
-  const scrollRef = useRef(null);
+import { Movie } from "@/app/features/movies/interfaces";
+import ErrorMessage from "@/components/ErrorMessage";
+
+interface MovieProp {
+  error?: any;
+  isLoading?: boolean;
+  title: string;
+  data: Movie[];
+}
+const MovieSections = ({ error, isLoading, title, data }: MovieProp) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -17,6 +27,22 @@ const MovieSections = ({ title, data }) => {
       scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  } else if (error) {
+    return (
+      <ErrorMessage
+        message={
+          error && "data" in error
+            ? error.data?.error || "An Error Occurred"
+            : "An Error Occurred"
+        }
+      />
+    );
+  } else if (data?.length === 0) {
+    return <p>No Movies Available</p>;
+  }
 
   return (
     <section>

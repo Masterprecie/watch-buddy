@@ -10,6 +10,7 @@ import { logout } from "@/app/features/auth/authSlice";
 import { alert } from "@/utils/alert";
 import { useCheckTokenExpiration } from "@/utils/checkExpiration";
 import Navbar from "@/components/Navbar";
+import { Movie } from "@/app/features/movies/interfaces";
 
 const HomePage = () => {
   const [page, setPage] = useState(1);
@@ -39,22 +40,30 @@ const HomePage = () => {
     }
   }, [status, session, router]);
 
-  const { data: popularMovies, error: popularError } = useGetMoviesQuery({
+  const {
+    data: popularMovies,
+    isLoading: popularLoading,
+    error: popularError,
+  } = useGetMoviesQuery({
     category: "popular",
     page,
   });
-  const { data: trendingMovies, error: trendingError } = useGetMoviesQuery({
+  const {
+    data: trendingMovies,
+    isLoading: trendingLoading,
+    error: trendingError,
+  } = useGetMoviesQuery({
     category: "trending",
     page,
   });
-  const { data: topRatedMovies, error: topRatedError } = useGetMoviesQuery({
+  const {
+    data: topRatedMovies,
+    isLoading: topRatedLoading,
+    error: topRatedError,
+  } = useGetMoviesQuery({
     category: "top_rated",
     page,
   });
-  // const { data: upcomingMovies, error: upcomingError } = useGetMoviesQuery({
-  //   category: "upcoming",
-  //   page,
-  // });
 
   const handleNextPage = () => {
     setPage((prev) => prev + 1);
@@ -64,22 +73,32 @@ const HomePage = () => {
     setPage((prev) => Math.max(prev - 1, 1));
   };
 
-  console.log("popularMovies", popularMovies);
-
-  if (trendingError || popularError || topRatedError) {
-    return <div>Error loading movies</div>;
-  }
   return (
     <div>
       <Navbar />
       <Hero
-        data={trendingMovies || []}
+        data={(trendingMovies || []) as Movie[]}
         handleNextPage={handleNextPage}
         handlePrevPage={handlePrevPage}
       />
-      <MovieSections title="Trending Movies" data={trendingMovies || []} />
-      <MovieSections title="Popular Movies" data={popularMovies || []} />
-      <MovieSections title="Top Rated Movies" data={topRatedMovies || []} />
+      <MovieSections
+        error={!!trendingError}
+        isLoading={trendingLoading}
+        title="Trending Movies"
+        data={(trendingMovies || []) as Movie[]}
+      />
+      <MovieSections
+        error={!!popularError}
+        isLoading={popularLoading}
+        title="Popular Movies"
+        data={(popularMovies || []) as Movie[]}
+      />
+      <MovieSections
+        error={!!topRatedError}
+        isLoading={topRatedLoading}
+        title="Top Rated Movies"
+        data={(topRatedMovies || []) as Movie[]}
+      />
     </div>
   );
 };
