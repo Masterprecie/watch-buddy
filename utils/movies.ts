@@ -52,7 +52,7 @@ export async function fetchMovies(category: string, page: number = 1) {
   }
 }
 
-export async function fetchMovieDetails(movieId: number | string) {
+export async function fetchMovieDetails(movieId: number) {
   try {
     const endpoint = `${MOVIE_BASE_URL}/movie/${movieId}?api_key=${MOVIE_API_KEY}&language=en-US`;
     const response = await fetch(endpoint);
@@ -100,7 +100,7 @@ export async function fetchMovieDetails(movieId: number | string) {
 }
 
 export async function fetchRecommendedMovies(
-  movieId: number | string,
+  movieId: number,
   page: number = 1
 ) {
   try {

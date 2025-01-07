@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {
   useAddToWatchListMutation,
@@ -23,6 +22,7 @@ export default function MovieDetails() {
     error,
     isLoading,
   } = useGetMoviesByIdQuery(Number(movieId));
+
   const {
     data: recommendedMovies,
     error: recommendedError,
@@ -31,6 +31,9 @@ export default function MovieDetails() {
     movieId: movieId ? String(movieId) : "",
     page: 1,
   });
+
+  const recommendedMoviesData = recommendedMovies?.data ?? [];
+  console.log("recommendedMoviesData", recommendedMoviesData);
 
   const [addWatchlist] = useAddToWatchListMutation();
 
@@ -87,13 +90,7 @@ export default function MovieDetails() {
         {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
-          <ErrorMessage
-            message={
-              error && "data" in error
-                ? (error.data as any)?.message || "An Error Occurred"
-                : "An Error Occurred"
-            }
-          />
+          <ErrorMessage error={error} />
         ) : (
           <div>
             <div className="flex gap-10">
@@ -171,13 +168,11 @@ export default function MovieDetails() {
             {recommendedLoading ? (
               <p>Loading...</p>
             ) : recommendedError ? (
-              <ErrorMessage
-                message={recommendedError?.data?.error || "An Error Occurred"}
-              />
-            ) : recommendedMovies?.length === 0 ? (
+              <ErrorMessage error={error} />
+            ) : recommendedMoviesData?.length === 0 ? (
               <p>There are no recommended movies</p>
             ) : (
-              recommendedMovies?.map((movie) => (
+              recommendedMoviesData?.map((movie) => (
                 <div key={movie.id}>
                   <MovieCard data={movie} showAddButton={true} />
                 </div>

@@ -54,6 +54,7 @@ export interface MovieResponse {
 
 export interface WatchListPayload {
   movieId: number;
+
   title?: string;
   name?: string;
   poster: string;
@@ -63,7 +64,7 @@ export interface WatchListPayload {
 }
 
 export interface WatchListResponse extends IResponse {
-  watchlist: {
+  data: {
     _id: string;
     userId: string;
     movies: [
@@ -129,6 +130,8 @@ export interface MovieRecommendations {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  rating: number;
+  poster: string;
 }
 
 export interface MovieRecommendationsResponse extends IResponse {

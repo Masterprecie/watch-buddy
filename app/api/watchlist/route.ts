@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     }
 
     return NextResponse.json(
-      { watchlist, message: "Watchlist retrieved Successfully" },
+      { data: watchlist, message: "Watchlist retrieved Successfully" },
       { status: 200 }
     );
   } catch (error) {
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
     // Check if the movie already exists in the watchlist
     const movieExists: boolean = watchlist.movies.some(
-      (movie: { movieId: string }) => movie.movieId === movieId.toString()
+      (movie: { movieId: number }) => movie.movieId === movieId
     );
 
     if (movieExists) {
@@ -121,7 +121,7 @@ export async function DELETE(req: Request) {
 
     // Find the movie and remove it
     const movieIndex: number = watchlist.movies.findIndex(
-      (movie: { movieId: string }) => movie.movieId === movieId.toString()
+      (movie: { movieId: number }) => movie.movieId === movieId
     );
 
     if (movieIndex === -1) {

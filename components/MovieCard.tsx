@@ -28,9 +28,11 @@ const MovieCard = ({
   const [addWatchlist] = useAddToWatchListMutation();
   const [removeWatchlist] = useDeleteWatchListMutation();
 
+  const id = (data.id || data.movieId) ?? 0;
+
   const handleAddWatchList = async () => {
     const payload = {
-      movieId: data.id,
+      movieId: id,
       title: data.name || data.title,
       poster: data.poster,
       overview: data.overview,
@@ -90,10 +92,10 @@ const MovieCard = ({
       <div>
         <Image
           src={`${data?.poster}`}
-          alt={data.name || data.title}
+          alt={data.title || "Movie Poster"}
           width={250}
           height={350}
-          className="w-full h-[350px] rounded-md"
+          className="w-full h-[400px] rounded-md"
         />
       </div>
 
@@ -138,7 +140,7 @@ const MovieCard = ({
       </div>
 
       <p>
-        <Link href={`/details/${data.id}`}>View Details</Link>
+        <Link href={`/details/${id}`}>View Details</Link>
       </p>
     </div>
   );

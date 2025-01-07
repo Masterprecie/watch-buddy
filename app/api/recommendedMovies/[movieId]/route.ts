@@ -4,7 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: any }) {
   try {
-    const { movieId } = params;
+    const { movieId } = await params;
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
 
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: any }) {
     }
 
     const recommendedMovies = await fetchRecommendedMovies(movieId, page);
-    return NextResponse.json(recommendedMovies, { status: 200 });
+    return NextResponse.json({ data: recommendedMovies }, { status: 200 });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Server Error";
