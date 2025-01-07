@@ -9,8 +9,6 @@ export default function WatchList() {
   const router = useRouter();
   const { data: watchlist, isLoading, error } = useGetWatchListQuery();
 
-  console.log("watchlist", watchlist);
-
   const watchlistData = watchlist?.watchlist?.movies;
   console.log("watchlistData", watchlistData);
   return (
