@@ -46,7 +46,7 @@ export default function WatchList() {
               <p>Your List is Empty</p>
             ) : (
               watchlistData?.map((movie) => (
-                <div key={movie.id}>
+                <div key={movie._id}>
                   <MovieCard data={movie} showRemoveButton={true} />
                 </div>
               ))

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {
   useAddToWatchListMutation,
@@ -49,7 +50,7 @@ export default function MovieDetails() {
       poster: movieData.poster,
       overview: movieData.overview,
       rating: movieData.rating,
-      watchlist: true,
+      addWatchlist: true,
     };
     addWatchlist(payload)
       .unwrap()
@@ -89,7 +90,7 @@ export default function MovieDetails() {
           <ErrorMessage
             message={
               error && "data" in error
-                ? error.data?.error || "An Error Occurred"
+                ? (error.data as any)?.message || "An Error Occurred"
                 : "An Error Occurred"
             }
           />

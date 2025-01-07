@@ -2,10 +2,11 @@ import { IResponse } from "../auth/interfaces";
 
 export interface Movie {
   movieId?: number;
-  id: number;
-  name: string;
-  title: string;
-  backdrop: string;
+  _id?: string;
+  id?: number;
+  name?: string;
+  title?: string;
+  backdrop?: string;
   rating: number;
   overview: string;
   poster: string;
@@ -49,8 +50,6 @@ export interface MovieResponse {
   overview: string;
   poster_path: string;
   vote_average: number;
-  category?: string;
-  page?: number;
 }
 
 export interface WatchListPayload {
@@ -69,11 +68,11 @@ export interface WatchListResponse extends IResponse {
     userId: string;
     movies: [
       {
-        movieId: string;
+        movieId: number;
         title: string;
         poster: string;
         overview: string;
-        rating: string;
+        rating: number;
         addWatchlist: boolean;
         _id: string;
       }

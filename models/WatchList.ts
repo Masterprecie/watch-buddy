@@ -8,11 +8,11 @@ const WatchlistSchema = new mongoose.Schema(
     },
     movies: [
       {
-        movieId: { type: String, required: true },
+        movieId: { type: Number, required: true },
         title: { type: String, required: true },
         poster: { type: String, required: true },
         overview: { type: String, required: true },
-        rating: { type: String, required: true },
+        rating: { type: Number, required: true },
         addWatchlist: { type: Boolean, default: false, required: true },
       },
     ],
