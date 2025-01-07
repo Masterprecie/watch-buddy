@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import User from "@/models/User";
 import { comparePassword } from "@/utils/bcrypt";
 import { setCookie } from "@/utils/cookie";
 import { connectDB } from "@/utils/db";

@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import User from "@/models/User";
 import { authenticate } from "@/utils/authMiddleware";
 import { connectDB } from "@/utils/db";
 import { NextResponse } from "next/server";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { User } from "@/models/User";
+import User from "@/models/User";
 import { hashedPassword } from "@/utils/bcrypt";
 import { connectDB } from "@/utils/db";
 
