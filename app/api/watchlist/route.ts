@@ -1,9 +1,9 @@
 import Watchlist from "@/models/WatchList";
 import { authenticate } from "@/utils/authMiddleware";
 import { connectDB } from "@/utils/db";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   await connectDB();
 
   let userId;
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   await connectDB();
   const { movieId, title, poster, overview, rating, addWatchlist } =
     await req.json();
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest) {
   await connectDB();
 
   let userId;

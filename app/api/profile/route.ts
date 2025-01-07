@@ -1,9 +1,9 @@
 import User from "@/models/User";
 import { authenticate } from "@/utils/authMiddleware";
 import { connectDB } from "@/utils/db";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   await connectDB();
 
   let userId;
