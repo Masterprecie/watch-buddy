@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { User } from "@/models/User";
 // import { connectDB } from "@/utils/db";
 // import NextAuth from "next-auth";
@@ -82,6 +83,17 @@ import { connectDB } from "@/utils/db";
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
 const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
@@ -99,7 +111,7 @@ const authOptions: AuthOptions = {
 
   callbacks: {
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.expires = token.expires as string; // Include token expiry in session
@@ -129,8 +141,8 @@ const authOptions: AuthOptions = {
       if (!existingUser && profile) {
         await User.create({
           email: profile.email,
-          firstName: profile.given_name,
-          lastName: profile.family_name,
+          firstName: (profile as any).given_name,
+          lastName: (profile as any).family_name,
           provider: "google",
           googleId: profile.sub,
         });
