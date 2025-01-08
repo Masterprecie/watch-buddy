@@ -51,6 +51,8 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
         modules={[Autoplay, Pagination]}
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index
         className="mySwiper"
+        touchStartPreventDefault={false} // Allow default touch behaviors
+        touchMoveStopPropagation={true}
       >
         {data?.map((movie) => (
           <SwiperSlide key={movie.id}>

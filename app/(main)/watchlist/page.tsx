@@ -66,8 +66,8 @@ export default function WatchList() {
             )}
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

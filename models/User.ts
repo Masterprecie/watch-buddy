@@ -4,9 +4,10 @@ const UserSchema = new mongoose.Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String }, // Not required for Google users
+    password: { type: String },
     provider: { type: String, required: true }, // "google" or "custom"
-    googleId: { type: String }, // Only for Google users
+    googleId: { type: String },
+    profilePic: { type: String },
   },
   { timestamps: true }
 );
