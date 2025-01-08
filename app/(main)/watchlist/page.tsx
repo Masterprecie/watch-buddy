@@ -34,10 +34,10 @@ export default function WatchList() {
             </button>
             <h1 className="text-4xl font-semibold">Your Watchlist </h1>
             <p>
-              by
+              by{" "}
               {session
-                ? session.user.name
-                : `${user.firstName} ${user.lastName}`}
+                ? session.user?.name
+                : `${user?.firstName} ${user?.lastName}`}{" "}
               • Created {formatRelativeTime(createdAt ?? "")} • Modified{" "}
               {formatRelativeTime(updatedAt ?? "")}
             </p>
