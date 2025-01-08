@@ -56,7 +56,7 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
           <SwiperSlide key={movie.id}>
             <div className="w-[90%] mx-auto py-28 h-full">
               <div className="max-w-[700px] ">
-                <h1 className="font-bold text-6xl">
+                <h1 className="font-bold text-5xl md:text-6xl">
                   {movie.name || movie.title}
                 </h1>
                 <div className="flex items-center gap-3 py-3">
@@ -72,7 +72,9 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
 
                   <p>{Math.round(movie?.rating)}/10</p>
                 </div>
-                <p className="pb-2 line-clamp-4">{movie.overview}</p>
+                <p className="pb-2 text-sm md:text-base line-clamp-4">
+                  {movie.overview}
+                </p>
 
                 <button className="flex items-center gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
                   <div>

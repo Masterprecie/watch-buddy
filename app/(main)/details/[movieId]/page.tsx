@@ -5,10 +5,12 @@ import {
   useGetRecommendedMoviesQuery,
 } from "@/app/features/movies/api";
 import ErrorMessage from "@/components/ErrorMessage";
+import Footer from "@/components/Footer";
 import MovieCard from "@/components/MovieCard";
 import Navbar from "@/components/Navbar";
 import { alert } from "@/utils/alert";
 import { formatDate } from "@/utils/formatDate";
+import { useAuth } from "@/utils/useAuth";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa6";
@@ -32,12 +34,20 @@ export default function MovieDetails() {
     page: 1,
   });
 
-  const recommendedMoviesData = recommendedMovies?.data ?? [];
-  console.log("recommendedMoviesData", recommendedMoviesData);
+  const { isAuthenticated } = useAuth();
 
+  const recommendedMoviesData = recommendedMovies?.data ?? [];
   const [addWatchlist] = useAddToWatchListMutation();
 
   const handleAddWatchList = async () => {
+    if (!isAuthenticated) {
+      alert({
+        type: "warning",
+        message: "Please login to add to watchlist",
+        timer: 3000,
+      });
+      return;
+    }
     if (!movieData) {
       alert({
         type: "error",
@@ -93,8 +103,8 @@ export default function MovieDetails() {
           <ErrorMessage error={error} />
         ) : (
           <div>
-            <div className="flex gap-10">
-              <div className="w-[30%]">
+            <div className="flex flex-col lg:flex-row gap-10">
+              <div className="w-full lg:w-[30%]">
                 {movieData?.poster && (
                   <Image
                     src={movieData.poster}
@@ -105,8 +115,8 @@ export default function MovieDetails() {
                   />
                 )}
               </div>
-              <div className="w-[70%]">
-                <h1 className="text-5xl font-bold ">
+              <div className="w-full lg:w-[70%]">
+                <h1 className="text-5xl md:text-6xl font-bold ">
                   {movieData?.name || movieData?.title}{" "}
                 </h1>
 
@@ -114,7 +124,7 @@ export default function MovieDetails() {
                   {movieData?.genres?.map((genre) => (
                     <p
                       key={genre.id}
-                      className="bg-gray-800 px-2 py-1 rounded-md"
+                      className="bg-gray-800 text-xs md:text-sm px-2 py-1 rounded-md"
                     >
                       {genre.name}
                     </p>
@@ -132,7 +142,9 @@ export default function MovieDetails() {
                         className="w-[37px] h-[17px]"
                       />
                     </div>
-                    <p>{Math.round(movieData?.rating ?? 0)}/10</p>
+                    <p className="text-xs md:text-sm">
+                      {Math.round(movieData?.rating ?? 0)}/10
+                    </p>
                   </div>
 
                   <div className="flex items-center text-white rounded-md py-1 px-2 text-[10px] gap-3 bg-yellow-600">
@@ -146,8 +158,10 @@ export default function MovieDetails() {
                 </div>
 
                 <div className="mt-5">
-                  <h1>Overview</h1>
-                  <p className="max-w-[600px]">{movieData?.overview}</p>
+                  <h1 className="font-medium text-base md:text-lg">Overview</h1>
+                  <p className="max-w-[600px] text-sm md:text-base">
+                    {movieData?.overview}
+                  </p>
                 </div>
 
                 <div
@@ -163,7 +177,9 @@ export default function MovieDetails() {
         )}
 
         <div className="w-full text-white py-16">
-          <h1 className="font-bold text-5xl pb-8">Recommended Movies</h1>
+          <h1 className="font-bold text-4xl md:text-5xl pb-8">
+            Recommended Movies
+          </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {recommendedLoading ? (
               <p>Loading...</p>
@@ -181,6 +197,7 @@ export default function MovieDetails() {
           </div>
         </div>
       </div>
+      <Footer />
     </section>
   );
 }

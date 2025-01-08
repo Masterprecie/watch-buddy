@@ -11,18 +11,13 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch } from "react-redux";
 const Navbar = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const dispatch = useDispatch();
   const router = useRouter();
-
-  console.log("status", status);
-  console.log("navsession", session);
 
   const [dropdown, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!dropdown);
   const { user, isAuthenticated } = useAuth();
-  console.log("user", user);
-  console.log("isAuthenticated", isAuthenticated);
 
   const handleLogout = () => {
     if (session) {
@@ -39,13 +34,13 @@ const Navbar = () => {
       <div className="flex items-center  justify-between w-[90%] mx-auto py-5">
         <div
           onClick={() => router.push("/")}
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 cursor-pointer"
         >
           <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
           <p className="font-semibold text-white">WatchBuddy</p>
         </div>
 
-        <div className="flex items-center  justify-center flex-1">
+        <div className="hidden lg:flex items-center  justify-center flex-1">
           <div className="relative w-1/2">
             <input
               type="text"

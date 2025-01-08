@@ -11,6 +11,7 @@ import { alert } from "@/utils/alert";
 import { useCheckTokenExpiration } from "@/utils/checkExpiration";
 import Navbar from "@/components/Navbar";
 import { Movie } from "@/app/features/movies/interfaces";
+import Footer from "@/components/Footer";
 
 const HomePage = () => {
   const [page, setPage] = useState(1);
@@ -99,6 +100,7 @@ const HomePage = () => {
         title="Top Rated Movies"
         data={(topRatedMovies || []) as Movie[]}
       />
+      <Footer />
     </div>
   );
 };

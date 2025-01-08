@@ -2,8 +2,8 @@ import Link from "next/link";
 import { FaFacebook, FaLinkedin, FaXTwitter, FaGithub } from "react-icons/fa6";
 const Footer = () => {
   return (
-    <footer className="bg-white text-black">
-      <div className="w-[90%] mx-auto flex flex-col py-5 items-center">
+    <footer className="bg-gray-200 boder-t text-black">
+      <div className="w-[90%] mx-auto flex flex-col py-10 items-center">
         <div>
           <div className="flex items-center justify-center gap-5">
             <Link
@@ -39,7 +39,7 @@ const Footer = () => {
             <p>Conditions of Use</p>
             <p>Privacy & Policy</p>
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-sm font-medium flex justify-center">
             © 2025 WatchBuddy by{""}
             <Link
               href="https://devprecie.vercel.app/"

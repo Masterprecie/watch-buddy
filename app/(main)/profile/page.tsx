@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/utils/useAuth";
 
@@ -17,6 +18,7 @@ export default function Profile() {
       <p>
         Welcome, {user.firstName || user.name} {user.lastName}!
       </p>
+      <Footer />
     </div>
   );
 }

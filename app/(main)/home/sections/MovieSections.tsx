@@ -40,8 +40,8 @@ const MovieSections = ({ error, isLoading, title, data }: MovieProp) => {
     <section>
       <div className="w-[90%] mx-auto py-16">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="font-bold text-3xl">{title}</h1>
-          <p className="font-medium text-xl text-[#BE123C] flex items-center gap-1">
+          <h1 className="font-bold text-xl md:text-3xl">{title}</h1>
+          <p className="font-medium text-sm md:text-xl text-[#BE123C] flex items-center gap-1">
             <Link href={`/movies?category=${title.toLowerCase()}`}>
               See More
             </Link>
@@ -50,27 +50,27 @@ const MovieSections = ({ error, isLoading, title, data }: MovieProp) => {
         </div>
         <div className="relative">
           <button
-            className="absolute left-[-40px] top-1/2 z-10 p-2 bg-gray-800 rounded-full text-white"
+            className="absolute left-0 md:left-[-40px] top-1/2 z-10 p-2 bg-gray-800 rounded-full text-white"
             onClick={scrollLeft}
           >
             <FaArrowLeft />
           </button>
           <div
             ref={scrollRef}
-            className="flex overflow-x-scroll scrollbar-hide space-x-5"
+            className="flex  overflow-x-scroll scrollbar-hide space-x-5"
             style={{ scrollSnapType: "x mandatory" }}
           >
             {data?.map((movie) => (
               <div
                 key={movie.id}
-                style={{ scrollSnapAlign: "start", flex: "0 0 25%" }}
+                className="snap-start flex-shrink-0 w-full md:w-1/4"
               >
                 <MovieCard data={movie} showAddButton={true} />
               </div>
             ))}
           </div>
           <button
-            className="absolute right-[-40px] top-1/2 z-10 p-2 bg-gray-800 rounded-full text-white"
+            className="absolute right-0 md:right-[-40px] top-1/2 z-10 p-2 bg-gray-800 rounded-full text-white"
             onClick={scrollRight}
           >
             <FaArrowRight />
