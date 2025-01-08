@@ -30,8 +30,12 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const payload = {
+      ...formValues,
+      provider: "custom",
+    };
     console.log(formValues);
-    initRegister(formValues)
+    initRegister(payload)
       .unwrap()
       .then((res) => {
         console.log(res);
