@@ -4,9 +4,9 @@ import { hashedPassword } from "@/utils/bcrypt";
 import { connectDB } from "@/utils/db";
 
 export async function POST(req: Request) {
-  const { firstName, lastName, email, password } = await req.json();
+  const { firstName, lastName, email, password, provider } = await req.json();
 
-  if (!firstName || !lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password || !provider) {
     return NextResponse.json(
       { message: "Please fill in all fields" },
       { status: 400 }
@@ -32,6 +32,7 @@ export async function POST(req: Request) {
       firstName,
       lastName,
       email,
+      provider,
       password: hashPassword,
     });
 

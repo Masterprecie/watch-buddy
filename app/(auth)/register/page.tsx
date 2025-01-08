@@ -34,7 +34,7 @@ export default function Login() {
       ...formValues,
       provider: "custom",
     };
-    console.log(formValues);
+    console.log(payload);
     initRegister(payload)
       .unwrap()
       .then((res) => {
