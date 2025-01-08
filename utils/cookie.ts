@@ -12,8 +12,8 @@ export const setCookie = (res: NextResponse, token: string) => {
 };
 
 // Clear cookie
-export const clearCookie = (res: NextResponse) => {
-  res.cookies.set("token", "", {
+export const clearCookie = (res: NextResponse, name: string) => {
+  res.cookies.set(name, "", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     path: "/",

@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Autoplay, Pagination } from "swiper/modules";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { Movie } from "@/app/features/movies/interfaces";
 
@@ -19,6 +19,7 @@ interface HeroProps {
 
 const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartRef = useRef({ startX: 0, startY: 0 });
 
   // Update the background image dynamically based on the active slide
   const currentBackground =
@@ -49,25 +50,36 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
           clickable: true,
         }}
         modules={[Autoplay, Pagination]}
-        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index
+        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         className="mySwiper"
-        freeMode={true} // Enable free scrolling mode
-        onTouchMove={(swiper) => {
-          // Allow vertical scrolling if the swipe is more vertical than horizontal
-          const touchAngle =
-            Math.atan2(
-              Math.abs(swiper.touches.currentY - swiper.touches.startY),
-              Math.abs(swiper.touches.currentX - swiper.touches.startX)
-            ) *
-            (180 / Math.PI);
-          if (touchAngle > 45 && touchAngle < 135) {
-            swiper.allowTouchMove = false; // Temporarily disable Swiper's touch handling
-          } else {
-            swiper.allowTouchMove = true; // Enable Swiper's touch handling for horizontal swipes
+        onTouchStart={(swiper, event) => {
+          const touchEvent = event as TouchEvent; // Cast to TouchEvent
+          if (touchEvent.touches && touchEvent.touches.length > 0) {
+            touchStartRef.current = {
+              startY: touchEvent.touches[0].clientY,
+              startX: touchEvent.touches[0].clientX,
+            };
+          }
+        }}
+        onTouchMove={(swiper, event) => {
+          const touchEvent = event as TouchEvent; // Cast to TouchEvent
+          if (touchEvent.touches && touchEvent.touches.length > 0) {
+            const currentY = touchEvent.touches[0].clientY;
+            const currentX = touchEvent.touches[0].clientX;
+            const diffY = Math.abs(currentY - touchStartRef.current.startY);
+            const diffX = Math.abs(currentX - touchStartRef.current.startX);
+
+            if (diffY > diffX) {
+              // Vertical scroll detected, disable Swiper slide change
+              swiper.allowTouchMove = false;
+            } else {
+              // Horizontal swipe detected, enable Swiper slide change
+              swiper.allowTouchMove = true;
+            }
           }
         }}
         onTouchEnd={(swiper) => {
-          // Re-enable Swiper's touch handling after a swipe ends
+          // Re-enable touch move after the gesture ends
           swiper.allowTouchMove = true;
         }}
       >

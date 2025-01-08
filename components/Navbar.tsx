@@ -1,4 +1,5 @@
 "use client";
+import { useLogoutMutation } from "@/app/features/auth/authApi";
 import { logout } from "@/app/features/auth/authSlice";
 import { useAuth } from "@/utils/useAuth";
 import { signOut, useSession } from "next-auth/react";
@@ -14,6 +15,7 @@ const Navbar = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
   const router = useRouter();
+  const [logoutUser] = useLogoutMutation();
 
   const [dropdown, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!dropdown);
@@ -24,8 +26,12 @@ const Navbar = () => {
       signOut({ callbackUrl: "/login" });
       dispatch(logout());
     } else {
-      dispatch(logout());
-      router.push("/login");
+      logoutUser()
+        .unwrap()
+        .then(() => {
+          dispatch(logout());
+          router.push("/login");
+        });
     }
   };
 

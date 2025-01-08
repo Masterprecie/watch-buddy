@@ -27,7 +27,7 @@ export const authApi = createApi({
     }),
     logout: builder.mutation<IResponse, void>({
       query: () => ({
-        url: `/auth/logout`,
+        url: `/api/logout`,
         method: "POST",
       }),
     }),
