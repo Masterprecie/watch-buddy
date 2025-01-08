@@ -116,7 +116,7 @@ export default function MovieDetails() {
                 )}
               </div>
               <div className="w-full lg:w-[70%]">
-                <h1 className="text-5xl md:text-6xl font-bold ">
+                <h1 className="text-4xl md:text-6xl font-bold ">
                   {movieData?.name || movieData?.title}{" "}
                 </h1>
 

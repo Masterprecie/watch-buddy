@@ -83,7 +83,7 @@ const Hero = ({ data }: HeroProps) => {
               className="w-[90%] mx-auto min-h-screen flex-shrink-0 flex items-center justify-start"
             >
               <div className="max-w-[700px]">
-                <h1 className="font-bold text-5xl md:text-6xl">
+                <h1 className="font-bold text-4xl md:text-6xl">
                   {movie.name || movie.title}
                 </h1>
                 <div className="flex items-center gap-3 py-3 ">
@@ -96,7 +96,9 @@ const Hero = ({ data }: HeroProps) => {
                       className="w-[37px] h-[17px]"
                     />
                   </div>
-                  <p>{Math.round(movie?.rating)}/10</p>
+                  <p className="text-sm md:text-base">
+                    {Math.round(movie?.rating)}/10
+                  </p>
                 </div>
                 <p className="pb-2 text-sm md:text-base max-w-[400px] md:max-w-[700px]">
                   {movie.overview}
