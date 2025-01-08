@@ -6,16 +6,20 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch } from "react-redux";
+import { IoListCircle } from "react-icons/io5";
+import { IoMdLogOut } from "react-icons/io";
+
 const Navbar = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
   const router = useRouter();
   const [logoutUser] = useLogoutMutation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [dropdown, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!dropdown);
@@ -34,6 +38,22 @@ const Navbar = () => {
         });
     }
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="relative z-50 bg-black text-white">
@@ -91,24 +111,29 @@ const Navbar = () => {
               )}
               <IoIosArrowDown className="text-xl " />
               {dropdown && (
-                <div className="absolute top-full right-0 space-y-1 py-2 bg-white text-black  rounded-md text-sm">
+                <div
+                  ref={dropdownRef}
+                  className="absolute top-full right-0 space-y-1 py-2 bg-white text-black  rounded-md text-sm"
+                >
                   <div className=" rounded-md">
-                    <Link
+                    {/* <Link
                       href="/profile"
                       className="block hover:bg-gray-300 px-3 py-2 font-medium "
                     >
                       Profile
-                    </Link>
+                    </Link> */}
                     <Link
                       href="/watchlist"
-                      className="block hover:bg-gray-300 px-3 py-2 font-medium "
+                      className="hover:bg-gray-300 px-3 py-2 font-medium flex items-center gap-2"
                     >
+                      <IoListCircle />
                       Watchlist
                     </Link>
                     <p
                       onClick={handleLogout}
-                      className="block hover:bg-gray-300  px-3 py-2 font-medium "
+                      className="hover:bg-gray-300  px-3 py-2 font-medium flex items-center gap-2"
                     >
+                      <IoMdLogOut />
                       Logout
                     </p>
                   </div>

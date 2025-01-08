@@ -148,7 +148,7 @@ export default function MovieDetails() {
                   </div>
 
                   <div className="flex items-center text-white rounded-md py-1 px-2 text-[10px] gap-3 bg-yellow-600">
-                    <p className=" ">Released Date</p>
+                    <p className=" ">Released Date :</p>
                     <p>
                       {movieData?.release_date
                         ? formatDate(movieData.release_date)

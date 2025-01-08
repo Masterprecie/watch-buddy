@@ -6,7 +6,7 @@ import ReduxProvider from "./providers/ReduxProvider";
 export const metadata: Metadata = {
   title: "WatchBuddy",
   description:
-    "Watch Buddy is a movie app that helps you keep track of movies you want to watch.",
+    "WatchBuddy is a movie app that helps you keep track of movies you want to watch.",
 };
 
 export default function RootLayout({

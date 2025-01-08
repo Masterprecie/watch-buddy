@@ -40,7 +40,7 @@ const Footer = () => {
             <p>Privacy & Policy</p>
           </div>
           <div className="text-sm font-medium flex justify-center">
-            © 2025 WatchBuddy by{""}
+            © {new Date().getFullYear()} WatchBuddy by{""}
             <Link
               href="https://devprecie.vercel.app/"
               target="_blank"
