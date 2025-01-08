@@ -42,13 +42,12 @@ const Hero = ({ data }: HeroProps) => {
     setIsScrolling(false);
   };
 
-  // Auto slide change every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
-    }, 10000); // Change slide every 5 seconds
+    }, 10000);
 
-    return () => clearInterval(interval); // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
   }, [data.length]);
 
   return (
@@ -74,7 +73,7 @@ const Hero = ({ data }: HeroProps) => {
         <div
           className="w-full h-full flex flex-col transition-transform duration-300 ease-in-out"
           style={{
-            transform: `translateY(-${activeIndex * 100}%)`, // Vertical translation
+            transform: `translateY(-${activeIndex * 100}%)`,
           }}
         >
           {data.map((movie) => (

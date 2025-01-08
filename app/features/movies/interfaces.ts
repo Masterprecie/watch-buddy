@@ -12,6 +12,16 @@ export interface Movie {
   poster: string;
 }
 
+export interface MovieDefault {
+  backdrop_path: string;
+  id: string;
+  title?: string;
+  name?: string;
+  overview: string;
+  poster_path: string;
+  vote_average: number;
+}
+
 export interface MovieDetails {
   adult: boolean;
   backdrop_path: string;
@@ -43,13 +53,10 @@ export interface MovieDetails {
 }
 
 export interface MovieResponse {
-  backdrop_path: string;
-  id: string;
-  title?: string;
-  name?: string;
-  overview: string;
-  poster_path: string;
-  vote_average: number;
+  page: number;
+  total_pages: number;
+  total_results: number;
+  results: Movie[];
 }
 
 export interface WatchListPayload {

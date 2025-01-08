@@ -1,6 +1,6 @@
 import {
+  MovieDefault,
   MovieRecommendations,
-  MovieResponse,
 } from "@/app/features/movies/interfaces";
 
 const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
@@ -37,15 +37,28 @@ export async function fetchMovies(category: string, page: number = 1) {
     }
 
     const data = await response.json();
-    return data.results.map((movie: MovieResponse) => ({
-      backdrop: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
-      id: movie.id,
-      name: movie.name,
-      title: movie.title,
-      overview: movie.overview,
-      poster: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
-      rating: movie.vote_average,
-    }));
+
+    return {
+      page: data.page,
+      total_pages: data.total_pages,
+      total_results: data.total_results,
+      results: data.results.map((movie: MovieDefault) => ({
+        backdrop: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
+        id: movie.id,
+        name: movie.name,
+        title: movie.title,
+        overview: movie.overview,
+        poster: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
+        rating: movie.vote_average,
+        // popularity: movie.popularity,
+        // release_date: movie.release_date,
+        // adult: movie.adult,
+        // genre_ids: movie.genre_ids,
+        // original_language: movie.original_language,
+        // video: movie.video,
+        // vote_count: movie.vote_count,
+      })),
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Failed to fetch movies");

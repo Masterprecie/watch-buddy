@@ -66,27 +66,34 @@ const HomePage = () => {
     page,
   });
 
+  const topRated = topRatedMovies?.results || [];
+  const trending = trendingMovies?.results || [];
+  const popular = popularMovies?.results || [];
+
   return (
     <div>
       <Navbar />
-      <Hero data={(trendingMovies || []) as Movie[]} />
+      <Hero data={(trending || []) as Movie[]} />
       <MovieSections
         error={!!trendingError}
         isLoading={trendingLoading}
         title="Trending Movies"
-        data={(trendingMovies || []) as Movie[]}
+        data={(trending || []) as Movie[]}
+        category="trending"
       />
       <MovieSections
         error={!!popularError}
         isLoading={popularLoading}
         title="Popular Movies"
-        data={(popularMovies || []) as Movie[]}
+        data={(popular || []) as Movie[]}
+        category="popular"
       />
       <MovieSections
         error={!!topRatedError}
         isLoading={topRatedLoading}
         title="Top Rated Movies"
-        data={(topRatedMovies || []) as Movie[]}
+        data={(topRated || []) as Movie[]}
+        category="top_rated"
       />
       <Footer />
     </div>
