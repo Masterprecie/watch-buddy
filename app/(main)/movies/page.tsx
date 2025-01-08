@@ -1,15 +1,16 @@
 "use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import MovieCard from "@/components/MovieCard";
 import { useGetMoviesQuery } from "@/app/features/movies/api";
 import ErrorMessage from "@/components/ErrorMessage";
-import { useRouter, useSearchParams } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa6";
 import { formatCategory } from "@/utils/helpers";
+import { FaArrowLeft } from "react-icons/fa";
 
 const MoviesPage = () => {
   const router = useRouter();
-
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "popular";
   const page = searchParams.get("page") || "1";
@@ -26,7 +27,6 @@ const MoviesPage = () => {
   return (
     <div className="bg-black min-h-screen text-white">
       <Navbar />
-
       <div className="w-[90%] mx-auto py-5">
         <button
           className="bg-gray-800 flex items-center gap-2 px-3 py-1 rounded-md my-5"
@@ -45,7 +45,7 @@ const MoviesPage = () => {
             <ErrorMessage error={error} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {moviesData?.results?.map((movie) => (
+              {moviesData?.results.map((movie) => (
                 <MovieCard key={movie.id} data={movie} showAddButton={true} />
               ))}
             </div>
@@ -79,4 +79,10 @@ const MoviesPage = () => {
   );
 };
 
-export default MoviesPage;
+const MoviesPageWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <MoviesPage />
+  </Suspense>
+);
+
+export default MoviesPageWrapper;
