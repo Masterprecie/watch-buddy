@@ -12,6 +12,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 export default function WatchList() {
   const router = useRouter();
   const { user } = useAuth();
+  const { data: session } = useSession();
   const { data: watchlist, isLoading, error } = useGetWatchListQuery();
   const watchlistData = watchlist?.data?.movies ?? [];
   const createdAt = watchlist?.data?.createdAt;
@@ -32,8 +33,11 @@ export default function WatchList() {
             </button>
             <h1 className="text-4xl font-semibold">Your Watchlist </h1>
             <p>
-              by {user.firstName} {user.lastName} • Created{" "}
-              {formatRelativeTime(createdAt ?? "")} • Modified{" "}
+              by
+              {session
+                ? session.user.name
+                : `${user.firstName} ${user.lastName}`}
+              • Created {formatRelativeTime(createdAt ?? "")} • Modified{" "}
               {formatRelativeTime(updatedAt ?? "")}
             </p>
             <p>

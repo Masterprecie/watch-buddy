@@ -4,7 +4,7 @@ import Session from "./providers/SessionProvider";
 import ReduxProvider from "./providers/ReduxProvider";
 
 export const metadata: Metadata = {
-  title: "Watch Buddy",
+  title: "WatchBuddy",
   description:
     "Watch Buddy is a movie app that helps you keep track of movies you want to watch.",
 };
