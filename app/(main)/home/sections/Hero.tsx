@@ -19,7 +19,7 @@ interface HeroProps {
 
 const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartRef = useRef({ startX: 0, startY: 0 });
+  const touchStartRef = useRef<{ startY: number; startX: number } | null>(null);
 
   // Update the background image dynamically based on the active slide
   const currentBackground =
@@ -53,8 +53,8 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         className="mySwiper"
         onTouchStart={(swiper, event) => {
-          const touchEvent = event as TouchEvent; // Cast to TouchEvent
-          if (touchEvent.touches && touchEvent.touches.length > 0) {
+          const touchEvent = event as TouchEvent;
+          if (touchEvent.touches?.[0]) {
             touchStartRef.current = {
               startY: touchEvent.touches[0].clientY,
               startX: touchEvent.touches[0].clientX,
@@ -62,24 +62,24 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
           }
         }}
         onTouchMove={(swiper, event) => {
-          const touchEvent = event as TouchEvent; // Cast to TouchEvent
-          if (touchEvent.touches && touchEvent.touches.length > 0) {
+          const touchEvent = event as TouchEvent;
+          if (touchEvent.touches?.[0] && touchStartRef.current) {
             const currentY = touchEvent.touches[0].clientY;
             const currentX = touchEvent.touches[0].clientX;
             const diffY = Math.abs(currentY - touchStartRef.current.startY);
             const diffX = Math.abs(currentX - touchStartRef.current.startX);
 
             if (diffY > diffX) {
-              // Vertical scroll detected, disable Swiper slide change
-              swiper.allowTouchMove = false;
+              // Vertical scroll detected
+              swiper.allowTouchMove = false; // Prevent Swiper from handling the gesture
             } else {
-              // Horizontal swipe detected, enable Swiper slide change
+              // Horizontal swipe detected
               swiper.allowTouchMove = true;
             }
           }
         }}
         onTouchEnd={(swiper) => {
-          // Re-enable touch move after the gesture ends
+          // Re-enable Swiper handling after the gesture ends
           swiper.allowTouchMove = true;
         }}
       >
