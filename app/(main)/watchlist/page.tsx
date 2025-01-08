@@ -6,6 +6,7 @@ import MovieCard from "@/components/MovieCard";
 import Navbar from "@/components/Navbar";
 import { formatRelativeTime } from "@/utils/helpers";
 import { useAuth } from "@/utils/useAuth";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa6";
 
