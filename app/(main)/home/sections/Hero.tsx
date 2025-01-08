@@ -51,8 +51,25 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
         modules={[Autoplay, Pagination]}
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index
         className="mySwiper"
-        touchStartPreventDefault={false} // Allow default touch behaviors
-        touchMoveStopPropagation={true}
+        freeMode={true} // Enable free scrolling mode
+        onTouchMove={(swiper) => {
+          // Allow vertical scrolling if the swipe is more vertical than horizontal
+          const touchAngle =
+            Math.atan2(
+              Math.abs(swiper.touches.currentY - swiper.touches.startY),
+              Math.abs(swiper.touches.currentX - swiper.touches.startX)
+            ) *
+            (180 / Math.PI);
+          if (touchAngle > 45 && touchAngle < 135) {
+            swiper.allowTouchMove = false; // Temporarily disable Swiper's touch handling
+          } else {
+            swiper.allowTouchMove = true; // Enable Swiper's touch handling for horizontal swipes
+          }
+        }}
+        onTouchEnd={(swiper) => {
+          // Re-enable Swiper's touch handling after a swipe ends
+          swiper.allowTouchMove = true;
+        }}
       >
         {data?.map((movie) => (
           <SwiperSlide key={movie.id}>
@@ -74,11 +91,9 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
 
                   <p>{Math.round(movie?.rating)}/10</p>
                 </div>
-                <p className="pb-2 text-sm md:text-base line-clamp-4">
-                  {movie.overview}
-                </p>
+                <p className="pb-2 text-sm md:text-base ">{movie.overview}</p>
 
-                <button className="flex items-center gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
+                <button className="flex items-center mt-5 gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
                   <div>
                     <Image
                       src="/assets/playIcon.svg"
