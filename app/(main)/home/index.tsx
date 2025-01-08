@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGetMoviesQuery } from "../../features/movies/api";
 import Hero from "./sections/Hero";
 import MovieSections from "./sections/MovieSections";
@@ -14,7 +14,7 @@ import { Movie } from "@/app/features/movies/interfaces";
 import Footer from "@/components/Footer";
 
 const HomePage = () => {
-  const [page, setPage] = useState(1);
+  const page = 1;
   const { data: session, status } = useSession();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -66,22 +66,10 @@ const HomePage = () => {
     page,
   });
 
-  const handleNextPage = () => {
-    setPage((prev) => prev + 1);
-  };
-
-  const handlePrevPage = () => {
-    setPage((prev) => Math.max(prev - 1, 1));
-  };
-
   return (
     <div>
       <Navbar />
-      <Hero
-        data={(trendingMovies || []) as Movie[]}
-        handleNextPage={handleNextPage}
-        handlePrevPage={handlePrevPage}
-      />
+      <Hero data={(trendingMovies || []) as Movie[]} />
       <MovieSections
         error={!!trendingError}
         isLoading={trendingLoading}

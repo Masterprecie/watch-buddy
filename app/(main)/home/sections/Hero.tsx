@@ -1,32 +1,59 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-
-// import required modules
-import { Autoplay, Pagination } from "swiper/modules";
-import { useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Movie } from "@/app/features/movies/interfaces";
 
 interface HeroProps {
   data: Movie[];
-  handleNextPage: () => void;
-  handlePrevPage: () => void;
 }
 
-const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
+const Hero = ({ data }: HeroProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartRef = useRef<{ startY: number; startX: number } | null>(null);
+  const [, setIsScrolling] = useState(false);
+  const [startTouch, setStartTouch] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Update the background image dynamically based on the active slide
   const currentBackground =
     data[activeIndex]?.backdrop && `url(${data[activeIndex].backdrop})`;
 
+  // Handle touch start
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setStartTouch({ x: touch.clientX, y: touch.clientY });
+    setIsScrolling(false);
+  };
+
+  // Handle touch move (prevent horizontal scroll when swiping vertically)
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startTouch.x;
+    const deltaY = touch.clientY - startTouch.y;
+
+    // Detect if the movement is horizontal or vertical
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      setIsScrolling(true); // Vertical swipe, prevent slide change
+    } else {
+      setIsScrolling(false); // Horizontal swipe, allow slide change
+    }
+  };
+
+  // Handle touch end
+  const handleTouchEnd = () => {
+    setIsScrolling(false);
+  };
+
+  // Auto slide change every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
+    }, 10000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval); // Clean up the interval when the component unmounts
+  }, [data.length]);
+
   return (
     <div
+      ref={containerRef}
       style={{
         position: "relative",
         background: "rgba(0, 0, 0, 0.8)",
@@ -37,60 +64,29 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
         transition: "background-image 0.5s ease-in-out",
       }}
       className="relative text-white"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <div className="absolute inset-0 bg-black opacity-50 pointer-events-none"></div>
 
-      <Swiper
-        direction={"vertical"}
-        autoplay={{
-          delay: 10000,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Autoplay, Pagination]}
-        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-        className="mySwiper"
-        onTouchStart={(swiper, event) => {
-          const touchEvent = event as TouchEvent;
-          if (touchEvent.touches?.[0]) {
-            touchStartRef.current = {
-              startY: touchEvent.touches[0].clientY,
-              startX: touchEvent.touches[0].clientX,
-            };
-          }
-        }}
-        onTouchMove={(swiper, event) => {
-          const touchEvent = event as TouchEvent;
-          if (touchEvent.touches?.[0] && touchStartRef.current) {
-            const currentY = touchEvent.touches[0].clientY;
-            const currentX = touchEvent.touches[0].clientX;
-            const diffY = Math.abs(currentY - touchStartRef.current.startY);
-            const diffX = Math.abs(currentX - touchStartRef.current.startX);
-
-            if (diffY > diffX) {
-              // Vertical scroll detected
-              swiper.allowTouchMove = false; // Prevent Swiper from handling the gesture
-            } else {
-              // Horizontal swipe detected
-              swiper.allowTouchMove = true;
-            }
-          }
-        }}
-        onTouchEnd={(swiper) => {
-          // Re-enable Swiper handling after the gesture ends
-          swiper.allowTouchMove = true;
-        }}
-      >
-        {data?.map((movie) => (
-          <SwiperSlide key={movie.id}>
-            <div className="w-[90%] mx-auto py-28 h-full">
-              <div className="max-w-[700px] ">
+      <div className="w-full h-full flex flex-col items-center justify-center overflow-hidden relative">
+        <div
+          className="w-full h-full flex flex-col transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateY(-${activeIndex * 100}%)`, // Vertical translation
+          }}
+        >
+          {data.map((movie) => (
+            <div
+              key={movie.id}
+              className="w-[90%] mx-auto min-h-screen flex-shrink-0 flex items-center justify-start"
+            >
+              <div className="max-w-[700px]">
                 <h1 className="font-bold text-5xl md:text-6xl">
                   {movie.name || movie.title}
                 </h1>
-                <div className="flex items-center gap-3 py-3">
+                <div className="flex items-center gap-3 py-3 ">
                   <div>
                     <Image
                       src="/assets/rating.svg"
@@ -100,16 +96,16 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
                       className="w-[37px] h-[17px]"
                     />
                   </div>
-
                   <p>{Math.round(movie?.rating)}/10</p>
                 </div>
-                <p className="pb-2 text-sm md:text-base ">{movie.overview}</p>
-
+                <p className="pb-2 text-sm md:text-base max-w-[400px] md:max-w-[700px]">
+                  {movie.overview}
+                </p>
                 <button className="flex items-center mt-5 gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
                   <div>
                     <Image
                       src="/assets/playIcon.svg"
-                      alt="rating"
+                      alt="play"
                       width={16}
                       height={16}
                     />
@@ -118,9 +114,24 @@ const Hero = ({ data, handlePrevPage, handleNextPage }: HeroProps) => {
                 </button>
               </div>
             </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          ))}
+        </div>
+
+        {/* Vertical Active Indicator */}
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+          <div className="flex flex-col space-y-1">
+            {data.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full cursor-pointer ${
+                  activeIndex === index ? "bg-red-500" : "bg-gray-500"
+                }`}
+                onClick={() => setActiveIndex(index)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
