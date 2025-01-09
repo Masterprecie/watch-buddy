@@ -43,6 +43,8 @@ const SearchPage = () => {
             <p>Loading...</p>
           ) : error ? (
             <ErrorMessage error={error} />
+          ) : moviesData?.results?.length === 0 ? (
+            <div>No Movies Found!!!</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {moviesData?.results?.map((movie) => (
