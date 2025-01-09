@@ -6,12 +6,12 @@ import MovieCard from "@/components/MovieCard";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
 
 const SearchPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Extract searchQuery and page directly from the URL
   const searchQuery = searchParams.get("query") || "";
   const page = searchParams.get("page") || "1";
 
@@ -28,6 +28,13 @@ const SearchPage = () => {
     <div className="bg-black min-h-screen text-white">
       <Navbar />
       <div className="w-[90%] mx-auto py-5">
+        <button
+          className="bg-gray-800 flex items-center gap-2 px-3 py-1 rounded-md my-5"
+          onClick={() => router.push("/")}
+        >
+          <FaArrowLeft />
+          Home
+        </button>
         <h1 className="text-4xl font-semibold capitalize">
           Search Results for {searchQuery}
         </h1>
