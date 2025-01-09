@@ -69,6 +69,16 @@ export const movieApi = createApi({
       }),
       invalidatesTags: [{ type: "WatchList" } as any],
     }),
+
+    searchMovies: builder.query<
+      MovieResponse,
+      { searchQuery: string; page: number }
+    >({
+      query: ({ searchQuery, page }) => ({
+        url: `/api/search?query=${searchQuery}&page=${page}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -79,4 +89,5 @@ export const {
   useDeleteWatchListMutation,
   useGetMoviesByIdQuery,
   useGetRecommendedMoviesQuery,
+  useSearchMoviesQuery,
 } = movieApi;

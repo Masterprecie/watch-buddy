@@ -98,7 +98,7 @@ const MovieCard = ({
     <div>
       <div>
         <Image
-          src={`${data?.poster}`}
+          src={`${data?.poster || "/assets/placeholder.png"}`}
           alt={data.title || "Movie Poster"}
           width={250}
           height={350}

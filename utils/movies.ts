@@ -151,3 +151,38 @@ export async function fetchRecommendedMovies(
     }
   }
 }
+
+export async function searchMovies(searchQuery: string, page: number = 1) {
+  try {
+    const endpoint = `${MOVIE_BASE_URL}/search/movie?query=${searchQuery}&api_key=${MOVIE_API_KEY}&language=en-US&page=${page}`;
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      throw new Error("Failed to search movies");
+    }
+
+    const data = await response.json();
+
+    return {
+      page: data.page,
+      total_pages: data.total_pages,
+      total_results: data.total_results,
+      results: data.results.map((movie: MovieDefault) => ({
+        backdrop: movie.backdrop_path
+          ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+          : null,
+        id: movie.id,
+        name: movie.name || null,
+        title: movie.title || null,
+        overview: movie.overview,
+        poster: movie.poster_path
+          ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+          : null,
+        rating: movie.vote_average,
+      })),
+    };
+  } catch (error) {
+    console.error("Error searching movies:", error);
+    throw new Error("Failed to search movies");
+  }
+}

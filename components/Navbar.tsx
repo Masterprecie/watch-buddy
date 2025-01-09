@@ -25,6 +25,13 @@ const Navbar = () => {
   const toggleDropdown = () => setDropdown(!dropdown);
   const { user, isAuthenticated } = useAuth();
 
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/search?query=${search}&page=1`);
+  };
+
   const handleLogout = () => {
     if (session) {
       signOut({ callbackUrl: "/login" });
@@ -67,16 +74,18 @@ const Navbar = () => {
         </div>
 
         <div className="hidden lg:flex items-center  justify-center flex-1">
-          <div className="relative w-1/2">
+          <form onSubmit={handleSearch} className="relative w-1/2">
             <input
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
               type="text"
               placeholder="What did you want to watch?"
               className="w-full placeholder:text-white px-3 py-2 bg-transparent border outline-0 text-white border-white rounded-md"
             />
-            <button className="block absolute top-2 right-1 ">
+            <button type="submit" className="block absolute top-2 right-1 ">
               <CiSearch className="text-white text-2xl" />
             </button>
-          </div>
+          </form>
         </div>
 
         {isAuthenticated ? (
