@@ -26,10 +26,12 @@ const Navbar = () => {
   const toggleDropdown = () => setDropdown(!dropdown);
   const { user, isAuthenticated } = useAuth();
 
+  const [showSearch, setShowSearch] = useState(false);
   const [search, setSearch] = useState("");
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setShowSearch(false);
     router.push(`/search?query=${search}&page=1`);
   };
 
@@ -62,7 +64,6 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const [showSearch, setShowSearch] = useState(false);
 
   return (
     <nav className="relative z-50 bg-black text-white">
