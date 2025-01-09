@@ -85,12 +85,12 @@ const Navbar = () => {
         <div className=" lg:hidden">
           <button
             onClick={() => setShowSearch(!showSearch)}
-            className="text-gray-300 hover:text-white mx-2"
+            className="text-gray-300 hover:text-white mt-2 "
           >
             {showSearch ? (
-              <MdOutlineCancel className="text-2xl w-6 h-6 font-thin" />
+              <MdOutlineCancel className=" w-6 h-6 font-thin" />
             ) : (
-              <CiSearch className="text-2xl w-6 h-6" />
+              <CiSearch className="w-6 h-6 " />
             )}
           </button>
           {showSearch && (
