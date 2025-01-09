@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import MovieCard from "@/components/MovieCard";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -72,4 +73,10 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+const SearchPageWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SearchPage />
+  </Suspense>
+);
+
+export default SearchPageWrapper;

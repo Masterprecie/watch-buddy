@@ -45,7 +45,7 @@ const Hero = ({ data }: HeroProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % data.length);
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [data.length]);
@@ -119,7 +119,7 @@ const Hero = ({ data }: HeroProps) => {
         </div>
 
         {/* Vertical Active Indicator */}
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+        {/* <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
           <div className="flex flex-col space-y-1">
             {data.map((_, index) => (
               <div
@@ -131,7 +131,7 @@ const Hero = ({ data }: HeroProps) => {
               />
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
