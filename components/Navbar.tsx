@@ -21,7 +21,9 @@ const Navbar = () => {
   const router = useRouter();
   const [logoutUser] = useLogoutMutation();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const [isFloating, setIsFloating] = useState(false);
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
   const [dropdown, setDropdown] = useState(false);
   const toggleDropdown = () => setDropdown(!dropdown);
   const { user, isAuthenticated } = useAuth();
@@ -65,8 +67,41 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollTop = window.scrollY;
+      if (currentScrollTop > lastScrollTop) {
+        setIsScrollingUp(false); // Scrolling down
+      } else {
+        setIsScrollingUp(true); // Scrolling up
+      }
+      setLastScrollTop(currentScrollTop);
+
+      if (window.scrollY > 50) {
+        setIsFloating(true);
+      } else {
+        setIsFloating(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [lastScrollTop]);
+
   return (
-    <nav className="relative z-50 bg-black text-white">
+    // <nav className="relative z-50 bg-black text-white">
+    <nav
+      className={`bg-black py-3 h-[80px] lg:h-[90px] flex flex-col justify-center mx-auto w-full ${
+        isFloating && isScrollingUp
+          ? "fixed top-5 h-[60px] flex flex-col justify-center opacity-90 py-3 rounded-2xl left-0 right-0 w-[95%] z-50 transform transition-all duration-300 ease-in-out"
+          : "relative z-40 transform transition-all duration-300 ease-in-out"
+      }`}
+    >
       <div className="relative flex items-center  justify-between w-[90%] mx-auto py-5">
         <div
           onClick={() => router.push("/")}
@@ -103,6 +138,7 @@ const Navbar = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 value={search}
                 type="text"
+                required
                 placeholder="What did you want to watch?"
                 className="w-full placeholder:text-white px-3 py-2 bg-transparent border outline-0 text-white border-white rounded-md"
               />
@@ -122,6 +158,7 @@ const Navbar = () => {
               onChange={(e) => setSearch(e.target.value)}
               value={search}
               type="text"
+              required
               placeholder="What did you want to watch?"
               className="w-full placeholder:text-white px-3 py-2 bg-transparent border outline-0 text-white border-white rounded-md"
             />
