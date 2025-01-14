@@ -96,10 +96,10 @@ const Navbar = () => {
   return (
     // <nav className="relative z-50 bg-black text-white">
     <nav
-      className={`bg-black py-3 h-[80px] lg:h-[90px] flex flex-col justify-center mx-auto w-full ${
+      className={`bg-black py-3 h-[80px] lg:h-[90px] flex flex-col justify-center mx-auto  ${
         isFloating && isScrollingUp
           ? "fixed top-5 h-[60px] flex flex-col justify-center opacity-90 py-3 rounded-2xl left-0 right-0 w-[95%] z-50 transform transition-all duration-300 ease-in-out"
-          : "relative z-40 transform transition-all duration-300 ease-in-out"
+          : "relative z-40 transform transition-all duration-300 ease-in-out w-full"
       }`}
     >
       <div className="relative flex items-center  justify-between w-[90%] mx-auto py-5">
