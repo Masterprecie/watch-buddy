@@ -4,8 +4,10 @@ import {
   useGetMoviesByIdQuery,
   useGetRecommendedMoviesQuery,
 } from "@/app/features/movies/api";
+import { useGetMovieTrailerQuery } from "@/app/features/movieTrailers/api";
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
+import TrailerModal from "@/components/Modal";
 import MovieCard from "@/components/MovieCard";
 import Navbar from "@/components/Navbar";
 import { alert } from "@/utils/alert";
@@ -13,12 +15,15 @@ import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "@/utils/useAuth";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaArrowLeft } from "react-icons/fa6";
-
+import { IoMdPlayCircle } from "react-icons/io";
 export default function MovieDetails() {
   const router = useRouter();
   const { movieId } = useParams();
+  const { isAuthenticated } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data: movieData,
     error,
@@ -33,8 +38,50 @@ export default function MovieDetails() {
     movieId: movieId ? String(movieId) : "",
     page: 1,
   });
+  const [shouldFetchTrailer, setShouldFetchTrailer] = useState(false);
 
-  const { isAuthenticated } = useAuth();
+  const {
+    data: trailerUrl,
+    isLoading: isLoadingTrailer,
+    error: errorTrailer,
+  } = useGetMovieTrailerQuery(
+    {
+      movieTitle: movieData?.title || movieData?.name || "",
+    },
+    { skip: !shouldFetchTrailer }
+  );
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setShouldFetchTrailer(true);
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    if (errorTrailer) {
+      console.error("Error fetching trailer:", error);
+      alert({
+        type: "warning",
+        message:
+          errorTrailer.data?.error?.message ||
+          "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
+        timer: 2000,
+      });
+      setIsModalOpen(false);
+      setShouldFetchTrailer(false);
+    } else if (!isLoadingTrailer && trailerUrl) {
+      setIsModalOpen(true);
+    }
+  }, [isLoadingTrailer, trailerUrl, errorTrailer]);
+
+  const handleWatchTrailer = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setShouldFetchTrailer(false);
+  };
 
   const recommendedMoviesData = recommendedMovies?.data ?? [];
   const [addWatchlist] = useAddToWatchListMutation();
@@ -171,6 +218,13 @@ export default function MovieDetails() {
                   <FaPlus />
                   Watchlist
                 </div>
+                <div
+                  onClick={handleWatchTrailer}
+                  className="inline-flex mt-3 ml-5 items-center gap-2 cursor-pointer rounded-md bg-blue-900 px-3 py-1 text-white"
+                >
+                  <IoMdPlayCircle />
+                  Play Trailer
+                </div>
               </div>
             </div>
           </div>
@@ -197,6 +251,14 @@ export default function MovieDetails() {
           </div>
         </div>
       </div>
+
+      {isModalOpen && trailerUrl && (
+        <TrailerModal
+          isOpen={isModalOpen}
+          trailerUrl={trailerUrl}
+          onClose={handleCloseModal}
+        />
+      )}
       <Footer />
     </section>
   );

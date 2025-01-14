@@ -11,6 +11,9 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaArrowRightLong } from "react-icons/fa6";
+import TrailerModal from "./Modal";
+import { useEffect, useState } from "react";
+import { useGetMovieTrailerQuery } from "@/app/features/movieTrailers/api";
 
 interface MovieCardProps {
   data: Movie;
@@ -23,6 +26,70 @@ const MovieCard = ({
   showRemoveButton,
   showAddButton,
 }: MovieCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shouldFetchTrailer, setShouldFetchTrailer] = useState(false);
+
+  const {
+    data: trailerUrl,
+    isLoading,
+    error,
+  } = useGetMovieTrailerQuery(
+    {
+      movieTitle: data.title || data.name || "",
+    },
+    { skip: !isModalOpen }
+  );
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setShouldFetchTrailer(true);
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Error fetching trailer:", error);
+      alert({
+        type: "warning",
+        message:
+          error.data?.error?.message ||
+          "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
+        timer: 2000,
+      });
+      setIsModalOpen(false);
+      setShouldFetchTrailer(false);
+    } else if (!isLoading && trailerUrl) {
+      setIsModalOpen(true);
+    }
+  }, [isLoading, trailerUrl, error]);
+
+  const handleWatchTrailer = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setShouldFetchTrailer(false);
+  };
+
+  // const handleWatchTrailer = () => {
+  //   console.log("Trailer URL:", trailerUrl);
+  //   console.log("Loading:", isLoading);
+  //   if (!isLoading && trailerUrl) {
+  //     setIsModalOpen(true);
+  //   } else if (error) {
+  //     console.error("Error fetching trailer:", error);
+  //     console.error("Error :", error.data.error.message);
+  //     alert({
+  //       type: "warning",
+  //       message:
+  //         error.data.error.message ||
+  //         "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
+  //       timer: 2000,
+  //     });
+  //   }
+  // };
+
   const [addWatchlist] = useAddToWatchListMutation();
   const [removeWatchlist] = useDeleteWatchListMutation();
   const { isAuthenticated } = useAuth();
@@ -96,14 +163,27 @@ const MovieCard = ({
 
   return (
     <div>
-      <div>
+      <div className="relative ">
         <Image
           src={`${data?.poster || "/assets/placeholder.png"}`}
           alt={data.title || "Movie Poster"}
           width={250}
           height={350}
-          className="w-full h-[400px] rounded-md object-cover"
+          className="w-full h-[400px] rounded-md object-cover hover:scale-105 transition-transform duration-300 ease-in-out"
         />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <button
+            onClick={handleWatchTrailer}
+            // className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <Image
+              src="/assets/playicon.webp"
+              alt="play"
+              width={250}
+              height={350}
+            />
+          </button>
+        </div>
       </div>
 
       <div className="space-y-2 pt-3">
@@ -150,6 +230,16 @@ const MovieCard = ({
         <Link href={`/details/${id}`}>View Details</Link>
         <FaArrowRightLong />
       </p>
+      {isModalOpen && trailerUrl && (
+        <TrailerModal
+          isOpen={isModalOpen}
+          trailerUrl={trailerUrl}
+          onClose={handleCloseModal}
+        />
+      )}
+      {shouldFetchTrailer && isLoading && (
+        <div className="text-white mt-2">Loading trailer...</div>
+      )}
     </div>
   );
 };

@@ -102,17 +102,6 @@ const Hero = ({ data }: HeroProps) => {
                 <p className="pb-2 text-sm md:text-base max-w-[400px] md:max-w-[700px]">
                   {movie.overview}
                 </p>
-                <button className="flex items-center mt-5 gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
-                  <div>
-                    <Image
-                      src="/assets/playIcon.svg"
-                      alt="play"
-                      width={16}
-                      height={16}
-                    />
-                  </div>
-                  Watch Trailer
-                </button>
               </div>
             </div>
           ))}
