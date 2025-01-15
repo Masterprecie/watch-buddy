@@ -4,6 +4,7 @@ import {
   useGetMoviesByIdQuery,
   useGetRecommendedMoviesQuery,
 } from "@/app/features/movies/api";
+import { ErrorResponse } from "@/app/features/movies/interfaces";
 import { useGetMovieTrailerQuery } from "@/app/features/movieTrailers/api";
 import ErrorMessage from "@/components/ErrorMessage";
 import Footer from "@/components/Footer";
@@ -13,12 +14,14 @@ import Navbar from "@/components/Navbar";
 import { alert } from "@/utils/alert";
 import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "@/utils/useAuth";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoMdPlayCircle } from "react-icons/io";
+
 export default function MovieDetails() {
   const router = useRouter();
   const { movieId } = useParams();
@@ -59,12 +62,17 @@ export default function MovieDetails() {
 
   useEffect(() => {
     if (errorTrailer) {
-      console.error("Error fetching trailer:", error);
+      console.error("Error fetching trailer:", errorTrailer);
+      const errorResponse = errorTrailer as FetchBaseQueryError & {
+        data: ErrorResponse;
+      };
+      const errorMessage =
+        errorResponse.data?.error?.message ||
+        "Sorry, we have reached the quota limit for trailer requests. Please try again later.";
+
       alert({
         type: "warning",
-        message:
-          errorTrailer.data?.error?.message ||
-          "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
+        message: errorMessage,
         timer: 2000,
       });
       setIsModalOpen(false);

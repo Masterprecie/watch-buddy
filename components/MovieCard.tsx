@@ -3,7 +3,7 @@ import {
   useAddToWatchListMutation,
   useDeleteWatchListMutation,
 } from "@/app/features/movies/api";
-import { Movie } from "@/app/features/movies/interfaces";
+import { ErrorResponse, Movie } from "@/app/features/movies/interfaces";
 import { alert } from "@/utils/alert";
 import { useAuth } from "@/utils/useAuth";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import TrailerModal from "./Modal";
 import { useEffect, useState } from "react";
 import { useGetMovieTrailerQuery } from "@/app/features/movieTrailers/api";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 interface MovieCardProps {
   data: Movie;
@@ -49,11 +50,16 @@ const MovieCard = ({
   useEffect(() => {
     if (error) {
       console.error("Error fetching trailer:", error);
+      const errorResponse = error as FetchBaseQueryError & {
+        data: ErrorResponse;
+      };
+      const errorMessage =
+        errorResponse.data?.error?.message ||
+        "Sorry, we have reached the quota limit for trailer requests. Please try again later.";
+
       alert({
         type: "warning",
-        message:
-          error.data?.error?.message ||
-          "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
+        message: errorMessage,
         timer: 2000,
       });
       setIsModalOpen(false);
