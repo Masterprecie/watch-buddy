@@ -65,10 +65,3 @@ const WatchTrailerButton = ({ movieTitle }: { movieTitle: string }) => {
 };
 
 export default WatchTrailerButton;
-
-//  <button className="flex items-center mt-5 gap-2 bg-red-500 text-white px-3 py-2 rounded-md">
-//    <div>
-//      <Image src="/assets/playIcon.svg" alt="play" width={16} height={16} />
-//    </div>
-//    Watch Trailer
-//  </button>;

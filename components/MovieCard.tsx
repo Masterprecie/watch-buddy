@@ -78,24 +78,6 @@ const MovieCard = ({
     setShouldFetchTrailer(false);
   };
 
-  // const handleWatchTrailer = () => {
-  //   console.log("Trailer URL:", trailerUrl);
-  //   console.log("Loading:", isLoading);
-  //   if (!isLoading && trailerUrl) {
-  //     setIsModalOpen(true);
-  //   } else if (error) {
-  //     console.error("Error fetching trailer:", error);
-  //     console.error("Error :", error.data.error.message);
-  //     alert({
-  //       type: "warning",
-  //       message:
-  //         error.data.error.message ||
-  //         "Sorry, we have reached the quota limit for trailer requests. Please try again later.",
-  //       timer: 2000,
-  //     });
-  //   }
-  // };
-
   const [addWatchlist] = useAddToWatchListMutation();
   const [removeWatchlist] = useDeleteWatchListMutation();
   const { isAuthenticated } = useAuth();
